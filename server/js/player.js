@@ -9,7 +9,7 @@ var cls = require("./lib/class"),
     Formulas = require("./formulas"),
     check = require("./format").check,
     Types = require("../../shared/js/gametypes")
-    bcrypt = require('bcrypt');
+//    bcrypt = require('bcrypt');
 
 module.exports = Player = Character.extend({
     init: function(connection, worldServer, databaseHandler) {
@@ -77,14 +77,17 @@ module.exports = Player = Character.extend({
                 self.pw = pw.substr(0, 15);
 
                 if(action === Types.Messages.CREATE) {
-                    bcrypt.genSalt(10, function(err, salt) {
+                   log.info("CREATE: " + self.name);
+                   self.email = Utils.sanitize(message[3]);
+                   databaseHandler.createPlayer(self);
+                   /* bcrypt.genSalt(10, function(err, salt) {
                         bcrypt.hash(self.pw, salt, function(err, hash) {
                             log.info("CREATE: " + self.name);
                             self.email = Utils.sanitize(message[3]);
                             self.pw = hash;
                             databaseHandler.createPlayer(self);
                         })
-                    });
+                    });*/
                 } else {
                     log.info("LOGIN: " + self.name);
                     if(self.server.loggedInPlayer(self.name)) {

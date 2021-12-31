@@ -3,8 +3,16 @@ var Utils = require('../utils');
 var cls = require("../lib/class"),
     Player = require('../player'),
     Messages = require("../message"),
-    redis = require("redis"),
-    bcrypt = require("bcrypt");
+    redis = require("redis");
+//    bcrypt = require("bcrypt");
+
+function pwdcompare(enteredpwd, pwd, cb) {
+    if (enteredpwd !== pwd) {
+        cb('bad passwd', false);
+    } else {
+        cb('', true);
+    }
+}
 
 module.exports = DatabaseHandler = cls.Class.extend({
     init: function(config){
@@ -99,7 +107,7 @@ module.exports = DatabaseHandler = cls.Class.extend({
 
                             // Check Password
 
-                            bcrypt.compare(player.pw, pw, function(err, res) {
+                            pwdcompare(player.pw, pw, function(err, res) {
                                 if(!res) {
                                     player.connection.sendUTF8("invalidlogin");
                                     player.connection.close("Wrong Password: " + player.name);

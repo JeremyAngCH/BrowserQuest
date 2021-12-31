@@ -12,6 +12,18 @@ var Map = cls.Class.extend({
 
         this.isLoaded = false;
 
+        if (fs.existsSync(filepath)) {
+            fs.readFile(filepath, function (err, file) {
+                var json = JSON.parse(file.toString());
+
+                self.initMap(json);
+            });
+        } else {
+            log.error(filepath + ' doesn\'t exists.');
+            return;
+        }
+
+/*
         file.exists(filepath, function (exists) {
 
             if (!exists) {
@@ -25,6 +37,7 @@ var Map = cls.Class.extend({
                 self.initMap(json);
             });
         });
+*/
     },
 
     initMap: function (thismap) {

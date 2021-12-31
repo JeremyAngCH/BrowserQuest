@@ -5,6 +5,7 @@ var cls = require('./lib/class');
 var http = require('http');
 var socketio = require('socket.io');
 var url = require('url');
+var fs = require('fs');
 var Utils = require('./utils');
 var WS = {};
 
@@ -190,7 +191,11 @@ WS.WebsocketServer = Server.extend({
                 response.end();
             });
 
-            this._httpServer = http.createServer(app).listen(port, this.ip || undefined, function serverEverythingListening() {
+            this._httpServer = http.createServer(/*{
+                key: fs.readFileSync('./key.pem'),
+                cert: fs.readFileSync('./cert.pem'),
+                passphrase: 'nodechatpass99'
+                },*/ app).listen(port, this.ip || undefined, function serverEverythingListening() {
                 log.info('Server (everything) is listening on port ' + port);
             });
         } else {
